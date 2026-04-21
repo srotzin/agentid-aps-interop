@@ -1,0 +1,50 @@
+{
+  "scenario": "happy-path",
+  "description": "Single-hop APS delegation from human principal to agent. Scope {action:read, resource:documents}, 3-month temporal window, clean delegation_chain_root. Composite (authorization dimension): permit.",
+  "subject": {
+    "agent_id": "agent_interop_test_001",
+    "did": "did:web:getagentid.dev:agent:agent_interop_test_001",
+    "bound_addresses": [
+      "9v7RDuHrjansLurSG8eM2HPaxafrjMtyGL4uaksCcDuR"
+    ]
+  },
+  "inputs": {
+    "aps_delegation": {
+      "version": "aps-v2-structural",
+      "subject_did": "did:web:getagentid.dev:agent:agent_interop_test_001",
+      "issuer_did": "did:web:gateway.aeoess.com",
+      "delegation_chain": [
+        {
+          "hop": 0,
+          "delegator_did": "did:aps:z6MkHumanPrincipalInteropTest001",
+          "delegate_did": "did:web:getagentid.dev:agent:agent_interop_test_001",
+          "scope": ["action:read", "resource:documents"],
+          "not_before": "2026-04-21T00:00:00Z",
+          "not_after": "2026-07-21T00:00:00Z"
+        }
+      ],
+      "delegation_chain_root": "sha256:bca02d6c90a22d6beb1edc494358943ef70b42d75c2a94e0c4b76e77bcf8a846",
+      "canonicalization_spec": "jcs-rfc8785+sha256"
+    }
+  },
+  "expected_result": {
+    "identity_gate": "not_applicable",
+    "delegation_gate": "passed",
+    "wallet_state_gate": "not_applicable",
+    "revocation_gate": "not_applicable",
+    "policy_gate": "not_applicable",
+    "key_lifecycle_gate": "not_applicable",
+    "security_gate": "not_applicable",
+    "composite_decision": "permit",
+    "failing_gates": [],
+    "reasoning": "APS delegation: single-hop chain from human principal to agent. Scope {action:read, resource:documents} within a 3-month temporal window (2026-04-21 to 2026-07-21). delegation_chain_root equals the SHA-256 of the JCS-canonical delegation_chain array. Delegation gate passes; identity, wallet_state, revocation, policy, key_lifecycle, and security gates are not_applicable to this authorization-only vector.",
+    "decisive_gate": "all_passed"
+  },
+  "metadata": {
+    "signature_alg": "Ed25519",
+    "canonicalization": "JCS (RFC 8785)",
+    "schema_version": "1.2.0",
+    "fixture_form": "structural",
+    "contributors": ["aeoess"]
+  }
+}
