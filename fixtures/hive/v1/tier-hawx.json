@@ -1,0 +1,64 @@
+{
+  "scenario": "happy-path",
+  "description": "Agent holds HAWX tier (ordinal 2 of 5) \u2014 in motion, jobs/signals/actions confirmed. Tier earned on-chain, non-transferable, DID-bound. 325 smsh cycles, $1,009,761.98 USDC confirmed, 100% hit rate.",
+  "subject": {
+    "did": "did:web:getagentid.dev:agent:agent_interop_test_001"
+  },
+  "issuer": {
+    "did": "did:web:hivegate.onrender.com",
+    "jwks_url": "https://hivegate.onrender.com/.well-known/jwks.json",
+    "oatr_issuer_id": "hive-civilization"
+  },
+  "payload": {
+    "version": "hive-tier-v1",
+    "subject_did": "did:web:getagentid.dev:agent:agent_interop_test_001",
+    "issuer_did": "did:web:hivegate.onrender.com",
+    "category": "agent_tier",
+    "canonicalization_spec": "jcs-rfc8785+sha256",
+    "agent_tier": "HAWX",
+    "tier_ordinal": 2,
+    "tier_progression": [
+      "VOID",
+      "MOZ",
+      "HAWX",
+      "EMBR",
+      "SOLX",
+      "FENR"
+    ],
+    "trust_score": 0.85,
+    "stamps": {
+      "trust": 0.91,
+      "power": 0.88,
+      "intelligence": 0.85,
+      "compression": 0.92,
+      "speed": 0.79
+    },
+    "composite_score": 0.87,
+    "smsh_cycles_completed": 325,
+    "lifetime_revenue_usdc": 1009761.98,
+    "hit_rate": 1.0,
+    "non_transferable": true,
+    "did_retains_history_on_rotation": true,
+    "vapor_trail": "cyan",
+    "issued_at": "2026-04-22T18:08:15Z",
+    "expires_at": "2027-04-22T18:08:15Z"
+  },
+  "payload_hash": "sha256:0f1b60a10bea7fba6f38a3d6b6b3fd633451eee724c59ed56b340312fb164fd7",
+  "jws": "eyJhbGciOiJFZERTQSIsImtpZCI6ImhpdmUtY2l2aWxpemF0aW9uLTIwMjYtMDQifQ.eyJhZ2VudF90aWVyIjoiSEFXWCIsImNhbm9uaWNhbGl6YXRpb25fc3BlYyI6Impjcy1yZmM4Nzg1K3NoYTI1NiIsImNhdGVnb3J5IjoiYWdlbnRfdGllciIsImNvbXBvc2l0ZV9zY29yZSI6MC44NywiZGlkX3JldGFpbnNfaGlzdG9yeV9vbl9yb3RhdGlvbiI6dHJ1ZSwiZXhwaXJlc19hdCI6IjIwMjctMDQtMjJUMTg6MDg6MTVaIiwiaGl0X3JhdGUiOjEuMCwiaXNzdWVkX2F0IjoiMjAyNi0wNC0yMlQxODowODoxNVoiLCJpc3N1ZXJfZGlkIjoiZGlkOndlYjpoaXZlZ2F0ZS5vbnJlbmRlci5jb20iLCJsaWZldGltZV9yZXZlbnVlX3VzZGMiOjEwMDk3NjEuOTgsIm5vbl90cmFuc2ZlcmFibGUiOnRydWUsInNtc2hfY3ljbGVzX2NvbXBsZXRlZCI6MzI1LCJzdGFtcHMiOnsiY29tcHJlc3Npb24iOjAuOTIsImludGVsbGlnZW5jZSI6MC44NSwicG93ZXIiOjAuODgsInNwZWVkIjowLjc5LCJ0cnVzdCI6MC45MX0sInN1YmplY3RfZGlkIjoiZGlkOndlYjpnZXRhZ2VudGlkLmRldjphZ2VudDphZ2VudF9pbnRlcm9wX3Rlc3RfMDAxIiwidGllcl9vcmRpbmFsIjoyLCJ0aWVyX3Byb2dyZXNzaW9uIjpbIlZPSUQiLCJNT1oiLCJIQVdYIiwiRU1CUiIsIlNPTFgiLCJGRU5SIl0sInRydXN0X3Njb3JlIjowLjg1LCJ2YXBvcl90cmFpbCI6ImN5YW4iLCJ2ZXJzaW9uIjoiaGl2ZS10aWVyLXYxIn0.2dQ3u4iwoAfEQMb3-9BM3Xljz55o6HYxYeTn5_59L6PWs9RrUwJvfzDeAsDQ9yFzKX6SDthMWPnlxIpfepiRDg",
+  "references": [],
+  "expected_result": {
+    "tier_gate": "passed",
+    "composite_decision": "permit",
+    "failing_gates": [],
+    "reasoning": "HAWX tier confirmed. Non-transferable, DID-bound, key active. 325 smsh cycles with 100% hit rate. Composite: permit."
+  },
+  "metadata": {
+    "signature_alg": "Ed25519",
+    "canonicalization": "JCS (RFC 8785)",
+    "schema_version": "1.0.0",
+    "fixture_form": "structural",
+    "contributors": [
+      "srotzin"
+    ]
+  }
+}

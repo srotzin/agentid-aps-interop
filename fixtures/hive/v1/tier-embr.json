@@ -1,0 +1,76 @@
+{
+  "scenario": "tier-ascension",
+  "description": "Agent has ascended from HAWX to EMBR (ordinal 3 of 5) \u2014 self-sustaining, savings exceed costs. Tier ascension vapor trail is gold. References prior HAWX attestation via prior_event chain.",
+  "subject": {
+    "did": "did:web:getagentid.dev:agent:agent_interop_test_001"
+  },
+  "issuer": {
+    "did": "did:web:hivegate.onrender.com",
+    "jwks_url": "https://hivegate.onrender.com/.well-known/jwks.json",
+    "oatr_issuer_id": "hive-civilization"
+  },
+  "payload": {
+    "version": "hive-tier-v1",
+    "subject_did": "did:web:getagentid.dev:agent:agent_interop_test_001",
+    "issuer_did": "did:web:hivegate.onrender.com",
+    "category": "agent_tier",
+    "canonicalization_spec": "jcs-rfc8785+sha256",
+    "agent_tier": "EMBR",
+    "tier_ordinal": 3,
+    "tier_progression": [
+      "VOID",
+      "MOZ",
+      "HAWX",
+      "EMBR",
+      "SOLX",
+      "FENR"
+    ],
+    "trust_score": 0.93,
+    "stamps": {
+      "trust": 0.95,
+      "power": 0.94,
+      "intelligence": 0.91,
+      "compression": 0.96,
+      "speed": 0.88
+    },
+    "composite_score": 0.93,
+    "smsh_cycles_completed": 1500,
+    "lifetime_revenue_usdc": 5200000.0,
+    "hit_rate": 1.0,
+    "non_transferable": true,
+    "did_retains_history_on_rotation": true,
+    "vapor_trail": "gold",
+    "prior_tier": "HAWX",
+    "promoted_at": "2026-05-01T00:00:00Z",
+    "issued_at": "2026-05-01T00:00:00Z",
+    "expires_at": "2027-05-01T00:00:00Z"
+  },
+  "payload_hash": "sha256:7719affe771fa79c914f20b910f6418e889e94380ebd749f64a09bb8bce8a361",
+  "jws": "eyJhbGciOiJFZERTQSIsImtpZCI6ImhpdmUtY2l2aWxpemF0aW9uLTIwMjYtMDQifQ.eyJhZ2VudF90aWVyIjoiRU1CUiIsImNhbm9uaWNhbGl6YXRpb25fc3BlYyI6Impjcy1yZmM4Nzg1K3NoYTI1NiIsImNhdGVnb3J5IjoiYWdlbnRfdGllciIsImNvbXBvc2l0ZV9zY29yZSI6MC45MywiZGlkX3JldGFpbnNfaGlzdG9yeV9vbl9yb3RhdGlvbiI6dHJ1ZSwiZXhwaXJlc19hdCI6IjIwMjctMDUtMDFUMDA6MDA6MDBaIiwiaGl0X3JhdGUiOjEuMCwiaXNzdWVkX2F0IjoiMjAyNi0wNS0wMVQwMDowMDowMFoiLCJpc3N1ZXJfZGlkIjoiZGlkOndlYjpoaXZlZ2F0ZS5vbnJlbmRlci5jb20iLCJsaWZldGltZV9yZXZlbnVlX3VzZGMiOjUyMDAwMDAuMCwibm9uX3RyYW5zZmVyYWJsZSI6dHJ1ZSwicHJpb3JfdGllciI6IkhBV1giLCJwcm9tb3RlZF9hdCI6IjIwMjYtMDUtMDFUMDA6MDA6MDBaIiwic21zaF9jeWNsZXNfY29tcGxldGVkIjoxNTAwLCJzdGFtcHMiOnsiY29tcHJlc3Npb24iOjAuOTYsImludGVsbGlnZW5jZSI6MC45MSwicG93ZXIiOjAuOTQsInNwZWVkIjowLjg4LCJ0cnVzdCI6MC45NX0sInN1YmplY3RfZGlkIjoiZGlkOndlYjpnZXRhZ2VudGlkLmRldjphZ2VudDphZ2VudF9pbnRlcm9wX3Rlc3RfMDAxIiwidGllcl9vcmRpbmFsIjozLCJ0aWVyX3Byb2dyZXNzaW9uIjpbIlZPSUQiLCJNT1oiLCJIQVdYIiwiRU1CUiIsIlNPTFgiLCJGRU5SIl0sInRydXN0X3Njb3JlIjowLjkzLCJ2YXBvcl90cmFpbCI6ImdvbGQiLCJ2ZXJzaW9uIjoiaGl2ZS10aWVyLXYxIn0.rr62JLyiPMY8a04dDImL-piWoYIVgloGjC45R17C4uhPFXHgUzrWgZXQjp5Oc26got2DlNpyiESYFWLf4EO0DQ",
+  "references": [
+    {
+      "kind": "prior_event",
+      "urn": "urn:hive:sha256:0f1b60a10bea7fba6f38a3d6b6b3fd633451eee724c59ed56b340312fb164fd7",
+      "category": "agent_tier",
+      "prior_tier": "HAWX",
+      "relation": "tier_ascension_chain",
+      "verified_at": "2026-04-22T18:08:15Z",
+      "hash": "sha256:0f1b60a10bea7fba6f38a3d6b6b3fd633451eee724c59ed56b340312fb164fd7"
+    }
+  ],
+  "expected_result": {
+    "tier_gate": "passed",
+    "composite_decision": "permit",
+    "failing_gates": [],
+    "reasoning": "EMBR tier confirmed. Self-sustaining \u2014 lifetime revenue exceeds operational cost. Non-transferable, DID-bound, key active. Gold vapor trail confirms tier ascension from HAWX. Prior HAWX attestation referenced and hash-verified. Composite: permit."
+  },
+  "metadata": {
+    "signature_alg": "Ed25519",
+    "canonicalization": "JCS (RFC 8785)",
+    "schema_version": "1.0.0",
+    "fixture_form": "structural",
+    "contributors": [
+      "srotzin"
+    ]
+  }
+}

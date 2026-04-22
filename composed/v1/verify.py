@@ -22,7 +22,7 @@ Per-envelope checks:
      matches the declared value.
   4. Each slot payload is independently JCS-canonicalizable without error.
   5. expected_composite.decision matches the naive composition rule:
-     permit iff all three slots have a passing native state, else deny.
+     permit iff all evaluated slots have a passing native state, else deny.
      Native passing state per slot is derived from fixture-level ground truth — see
      _slot_passes() for the exact rule applied per slot role.
 
@@ -58,6 +58,7 @@ SLOT_EXPECTED_VERSIONS = {
     # predate the slot-version convention Harold proposed on #5. Accept both until the
     # AgentID v1 fixtures are reshaped to carry the slot version string.
     "agentid": {"agentid-identity-v1-structural", "1.0.0", "1.0.1", "1.1.0", "1.2.0"},
+    "hive": {"hive-tier-v1"},
 }
 
 
@@ -115,7 +116,16 @@ def _slot_passes(slot, slot_name):
             return False
         return True
 
-    raise ValueError(f"unknown slot name: {slot_name}")
+    if slot_name == "hive":
+        # Hive tier gate: tier must be a known tier (not VOID), key active,
+        # non_transferable must be True, and hit_rate >= 0.8
+        tier = slot.get("agent_tier", "VOID")
+        non_transferable = slot.get("non_transferable", False)
+        hit_rate = slot.get("hit_rate", 0.0)
+        known_tiers = {"MOZ", "HAWX", "EMBR", "SOLX", "FENR"}
+        return tier in known_tiers and non_transferable is True and hit_rate >= 0.8
+
+        raise ValueError(f"unknown slot name: {slot_name}")
 
 
 def _recompute_delegation_chain_root(chain):
@@ -138,12 +148,14 @@ def verify_envelope(path):
 
     slots = envelope.get("slots", {})
 
-    # Check 2: all three slots present
+        # Check 2: core slots always required; hive slot only required in hive-specific fixtures
     for slot_name in ("agentid", "aps", "agentgraph"):
         rows.append((f"slots.{slot_name} present", slot_name in slots))
+    if "hive" in path.name:
+        rows.append(("slots.hive present", "hive" in slots))
 
     # Check 3: subject_did consistency
-    for slot_name in ("agentid", "aps", "agentgraph"):
+    for slot_name in ("agentid", "aps", "agentgraph", "hive"):
         if slot_name not in slots:
             continue
         try:
@@ -168,7 +180,7 @@ def verify_envelope(path):
         rows.append(("aps delegation_chain_root matches JCS+SHA256 recompute", declared == recomputed))
 
     # Check 6: JCS-canonicalize each slot
-    for slot_name in ("agentid", "aps", "agentgraph"):
+    for slot_name in ("agentid", "aps", "agentgraph", "hive"):
         if slot_name not in slots:
             continue
         try:
@@ -178,7 +190,7 @@ def verify_envelope(path):
             rows.append((f"slots.{slot_name} JCS-canonicalizes", False))
 
     # Check 7: naive composite rule agreement
-    passes = {s: _slot_passes(slots[s], s) for s in ("agentid", "aps", "agentgraph") if s in slots}
+    passes = {s: _slot_passes(slots[s], s) for s in ("agentid", "aps", "agentgraph", "hive") if s in slots}
     all_pass = all(passes.values())
     expected_decision = envelope.get("expected_composite", {}).get("decision")
     computed_decision = "permit" if all_pass else "deny"
