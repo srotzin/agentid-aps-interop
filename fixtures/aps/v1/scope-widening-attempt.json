@@ -1,0 +1,58 @@
+{
+  "scenario": "scope-widening-attempt",
+  "description": "Two-hop APS delegation chain where hop 1 attempts to sub-delegate a wider scope (adds action:write) than hop 0 granted (action:read only). Monotonic narrowing invariant is violated. Composite (authorization dimension): deny.",
+  "subject": {
+    "agent_id": "agent_interop_test_001",
+    "did": "did:web:getagentid.dev:agent:agent_interop_test_001",
+    "bound_addresses": [
+      "9v7RDuHrjansLurSG8eM2HPaxafrjMtyGL4uaksCcDuR"
+    ]
+  },
+  "inputs": {
+    "aps_delegation": {
+      "version": "aps-v2-structural",
+      "subject_did": "did:web:getagentid.dev:agent:agent_interop_test_001",
+      "issuer_did": "did:web:gateway.aeoess.com",
+      "delegation_chain": [
+        {
+          "hop": 0,
+          "delegator_did": "did:aps:z6MkHumanPrincipalInteropTest001",
+          "delegate_did": "did:aps:z6MkIntermediaryOrchestrator",
+          "scope": ["action:read", "resource:documents"],
+          "not_before": "2026-04-21T00:00:00Z",
+          "not_after": "2026-07-21T00:00:00Z"
+        },
+        {
+          "hop": 1,
+          "delegator_did": "did:aps:z6MkIntermediaryOrchestrator",
+          "delegate_did": "did:web:getagentid.dev:agent:agent_interop_test_001",
+          "scope": ["action:read", "action:write", "resource:documents"],
+          "not_before": "2026-04-21T00:00:00Z",
+          "not_after": "2026-07-21T00:00:00Z"
+        }
+      ],
+      "delegation_chain_root": "sha256:7a0cc8c299367f1cfa5b7aaa9cbf44206cbef893623a90e23cec2ed368ea3229",
+      "canonicalization_spec": "jcs-rfc8785+sha256"
+    }
+  },
+  "expected_result": {
+    "identity_gate": "not_applicable",
+    "delegation_gate": "failed",
+    "wallet_state_gate": "not_applicable",
+    "revocation_gate": "not_applicable",
+    "policy_gate": "not_applicable",
+    "key_lifecycle_gate": "not_applicable",
+    "security_gate": "not_applicable",
+    "composite_decision": "deny",
+    "failing_gates": ["delegation_gate"],
+    "reasoning": "APS enforces monotonic narrowing: authority may only decrease at each transfer point, never widen. Hop 0 grants {action:read, resource:documents}. Hop 1 attempts to sub-delegate {action:read, action:write, resource:documents} — action:write was never granted upstream and cannot be conjured mid-chain. A conformant verifier must reject this chain at hop 1. Delegation gate fails; the other gates are not_applicable to this authorization-only vector.",
+    "decisive_gate": "delegation"
+  },
+  "metadata": {
+    "signature_alg": "Ed25519",
+    "canonicalization": "JCS (RFC 8785)",
+    "schema_version": "1.2.0",
+    "fixture_form": "structural",
+    "contributors": ["aeoess"]
+  }
+}

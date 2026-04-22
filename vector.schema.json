@@ -82,9 +82,51 @@
         },
         "aps_delegation": {
           "type": "object",
-          "description": "APS delegation envelope.",
+          "description": "APS delegation envelope. Two shapes are tolerated. Legacy (pre-v1-structural): flat delegator/delegate/scope/spend_limit/wallet_ref/not_before/not_after/nonce, used by the earliest APS interop fixtures. v1-structural (published shape: aps-v2-structural — the version string names the APS crate version, not the envelope schema generation): delegation_chain array with per-hop delegator_did/delegate_did/scope/not_before/not_after, a delegation_chain_root sha256 hash over the JCS-canonicalized chain, issuer_did pinned to did:web:gateway.aeoess.com, and canonicalization_spec. v2 will add signed_form alongside AgentID and AgentGraph in lockstep.",
           "properties": {
-            "version": { "type": "string" },
+            "version": {
+              "type": "string",
+              "description": "Legacy: semver (e.g. '1.40.0'). v1-structural: 'aps-v2-structural' (the version string tracks the APS crate, not the envelope generation)."
+            },
+            "subject_did": {
+              "type": "string",
+              "description": "DID of the subject the delegation is about — typically shared with the AgentID and AgentGraph slots in a composed envelope."
+            },
+            "issuer_did": {
+              "type": "string",
+              "description": "APS issuer DID. Stable — external verifiers pin to this value.",
+              "const": "did:web:gateway.aeoess.com"
+            },
+            "delegation_chain": {
+              "type": "array",
+              "description": "Ordered list of delegation hops, index 0 being the principal grant and each subsequent hop sub-delegating a scope that MUST be a subset of its parent (monotonic narrowing). A revocation entry on any ancestor hop invalidates the whole chain (cascade revocation).",
+              "items": {
+                "type": "object",
+                "required": ["hop", "delegator_did", "delegate_did", "scope", "not_before", "not_after"],
+                "properties": {
+                  "hop": { "type": "integer", "minimum": 0 },
+                  "delegator_did": { "type": "string" },
+                  "delegate_did": { "type": "string" },
+                  "scope": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "not_before": { "type": "string", "format": "date-time" },
+                  "not_after": { "type": "string", "format": "date-time" },
+                  "revoked_at": { "type": ["string", "null"], "format": "date-time" },
+                  "revocation_reason": { "type": ["string", "null"] }
+                }
+              }
+            },
+            "delegation_chain_root": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "description": "SHA-256 over the JCS-canonicalized delegation_chain array. Format: 'sha256:<64 hex chars>'. Consumers MUST independently recompute and verify before trusting chain contents."
+            },
+            "canonicalization_spec": {
+              "type": "string",
+              "const": "jcs-rfc8785+sha256"
+            },
             "delegator": { "type": "string" },
             "delegate": { "type": "string" },
             "scope": {

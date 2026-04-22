@@ -1,0 +1,60 @@
+{
+  "scenario": "revoked-delegation",
+  "description": "Two-hop APS delegation chain where hop 0 (human principal to intermediary orchestrator) has revoked_at populated. Cascade revocation invalidates the entire chain regardless of hop 1's structural validity. Composite (authorization dimension): deny.",
+  "subject": {
+    "agent_id": "agent_interop_test_001",
+    "did": "did:web:getagentid.dev:agent:agent_interop_test_001",
+    "bound_addresses": [
+      "9v7RDuHrjansLurSG8eM2HPaxafrjMtyGL4uaksCcDuR"
+    ]
+  },
+  "inputs": {
+    "aps_delegation": {
+      "version": "aps-v2-structural",
+      "subject_did": "did:web:getagentid.dev:agent:agent_interop_test_001",
+      "issuer_did": "did:web:gateway.aeoess.com",
+      "delegation_chain": [
+        {
+          "hop": 0,
+          "delegator_did": "did:aps:z6MkHumanPrincipalInteropTest001",
+          "delegate_did": "did:aps:z6MkIntermediaryOrchestrator",
+          "scope": ["action:read", "resource:documents"],
+          "not_before": "2026-04-15T00:00:00Z",
+          "not_after": "2026-07-15T00:00:00Z",
+          "revoked_at": "2026-04-19T08:30:00Z",
+          "revocation_reason": "principal_rotated_sub_delegation_key"
+        },
+        {
+          "hop": 1,
+          "delegator_did": "did:aps:z6MkIntermediaryOrchestrator",
+          "delegate_did": "did:web:getagentid.dev:agent:agent_interop_test_001",
+          "scope": ["action:read", "resource:documents"],
+          "not_before": "2026-04-16T00:00:00Z",
+          "not_after": "2026-07-15T00:00:00Z"
+        }
+      ],
+      "delegation_chain_root": "sha256:e75723a86231eb9e771e7670776997cb6743551d435ef3ba49e2072ac4a84eb8",
+      "canonicalization_spec": "jcs-rfc8785+sha256"
+    }
+  },
+  "expected_result": {
+    "identity_gate": "not_applicable",
+    "delegation_gate": "failed",
+    "wallet_state_gate": "not_applicable",
+    "revocation_gate": "not_applicable",
+    "policy_gate": "not_applicable",
+    "key_lifecycle_gate": "not_applicable",
+    "security_gate": "not_applicable",
+    "composite_decision": "deny",
+    "failing_gates": ["delegation_gate"],
+    "reasoning": "APS rejects any delegation chain whose ancestor hops carry a revocation entry, even when the leaf hop itself is structurally valid and within its temporal window. Here hop 0 (principal to intermediary) was revoked at 2026-04-19T08:30:00Z with reason principal_rotated_sub_delegation_key. Cascade revocation is a core protocol invariant: authority flowing through a revoked parent cannot be re-authorized by a still-live child. Delegation gate fails.",
+    "decisive_gate": "delegation"
+  },
+  "metadata": {
+    "signature_alg": "Ed25519",
+    "canonicalization": "JCS (RFC 8785)",
+    "schema_version": "1.2.0",
+    "fixture_form": "structural",
+    "contributors": ["aeoess"]
+  }
+}
